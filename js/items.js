@@ -54,17 +54,36 @@ class item {
 
 
 class sound {
-    constructor (effect){
+    constructor (effect, volume,loop=false){
         this.effect = effect;
         this.domElement = document.createElement('audio');
         this.domElement.src = `sounds/${effect}.mp3`;
         this.domElement.setAttribute("preload", "auto");
         this.domElement.setAttribute("controls", "none");
         this.domElement.style.display = 'none';
+        this.domElement.volume = `${volume}`;
+        this.domElement.loop = loop;
         document.body.appendChild(this.domElement);
     }
 
     play(){
         this.domElement.play();
     }
+    stop(){
+        this.domElement.pause();
+        this.domElement.currentTime = 0;
+    }
+
+    /*turnOnOff(){
+        console.log('click');
+        music_playing = music_playing ==true? false:true;
+
+        if(music_playing){
+            musicToggle.innerText = "music: on";
+            this.domElement.play();
+        }else{
+            musicToggle.innerText = "music: off";
+            this.domElement.pause();
+        }
+    }*/
 }

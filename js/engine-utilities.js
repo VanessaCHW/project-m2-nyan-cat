@@ -129,6 +129,7 @@ const startGame = () =>{
         gameEngine.player.increaseLevel();
       },12000);
 
+      backgroundMusic.play();
 };
 
 

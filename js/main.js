@@ -3,6 +3,7 @@
 const gameEngine = new Engine(document.getElementById('app'));
 startMenu(gameEngine.root);
 
+/** Usefull nodes */
 const startButton = document.getElementById('startButton');
 const restartButton = document.getElementById('restartClicked');
 
@@ -32,12 +33,11 @@ const keydownHandler = (event) => {
 // We add an event listener to document. document the ancestor of all DOM nodes in the DOM.
 document.addEventListener('keydown', keydownHandler);
 
-//Sound effects
-let collisionSound = new sound('arrow');
-let mugSound = new sound('drinking');
-mugSound.domElement.volume = 1;
-let manSound = new sound('bells');
-manSound.domElement.volume = 0.4;
+//Sound effects and background music
+let collisionSound = new sound('arrow',1);
+let mugSound = new sound('drinking',1);
+let manSound = new sound('bells',0.08);
+let backgroundMusic = new sound('happy',0.01,true);
 
 //Start game
 startButton.addEventListener('click', startGame);

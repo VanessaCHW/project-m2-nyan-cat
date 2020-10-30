@@ -1,39 +1,28 @@
-// The engine class will only be instantiated once. It contains all the logic
-// of the game relating to the interactions between the player and the
-// enemy and also relating to how our enemies are created and evolve over time
 class Engine {
 
   constructor(theRoot) {
     this.root = theRoot;
     this.player = new Player(this.root);
     this.enemies = [];
-    /* For enemies coming from the left*/
-    this.leftenemies = [];
-    this.items = [];
+    this.leftenemies = []; //New array for enemies coming from the left
+    this.items = []; // New array for items that will pop randomly
     addBackground(this.root);    
   }
 
-  // The gameLoop will run every few milliseconds. It does several things
-  //  - Updates the enemy positions
-  //  - Detects a collision between the player and any enemy
-  //  - Removes enemies that are too low from the enemies array
+ 
   gameLoop = () => {
-    // This code is to see how much time, in milliseconds, has elapsed since the last
-    // time this method was called.
-    // (new Date).getTime() evaluates to the number of milliseconds since January 1st, 1970 at midnight.
     if (this.lastFrame === undefined) {
       this.lastFrame = new Date().getTime();
     }
 
     let timeDiff = new Date().getTime() - this.lastFrame;
-
     this.lastFrame = new Date().getTime();
-    // We use the number of milliseconds since the last call to gameLoop to update the enemy positions.
-    // Furthermore, if any enemy is below the bottom of our game, its destroyed property will be set. (See Enemy.js)
+
     this.enemies.forEach((enemy) => {
       enemy.update(timeDiff);
     });
 
+    /**  Update position for enemies coming left*/
     this.leftenemies.forEach((enemy) => {
       enemy.updateLeftEnemies(timeDiff);
     });
@@ -43,19 +32,19 @@ class Engine {
       return !enemy.destroyed;
     });
 
+    /**  Remove destroyed enemies coming left*/
     this.leftenemies = this.leftenemies.filter((enemy) => {
       return !enemy.destroyed;
     });
 
-    // We need to perform the addition of enemies until we have enough enemies.
     while (this.enemies.length < MAX_ENEMIES) {
-      // We find the next available spot and, using this spot, we create an enemy.
-      // We add this enemy to the enemies array
       const spot = nextEnemySpot(this.enemies);
       this.enemies.push(new Enemy(this.root, spot));
     }
 
-
+    /** Create enemies from the left. Settings (x,y)
+     *  are different from regular enemies.
+     */
     while(this.leftenemies.length < MAX_LEFT_ENEMIES){
       const spot = nextLeftEnemySpot(this.leftenemies);
       let leftEn = new Enemy(this.root, spot);
@@ -72,6 +61,7 @@ class Engine {
       stopScoreboard();
       clearInterval(startLevelCount);
       document.getElementById('restartPrompt').style.display = 'block';
+      backgroundMusic.stop();
       return;
     }
 
