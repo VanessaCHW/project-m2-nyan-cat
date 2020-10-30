@@ -21,13 +21,13 @@ class Enemy {
 
     // The x position of the enemy is determined by its width and its spot. We need this information for the lifetime
     // of the instance, so we make it a property of the instance. (Why is this information needed for the lifetime of the instance?)
-    this.x = enemySpot * ENEMY_WIDTH;
+    this.x = enemySpot * PLAYER_WIDTH;
 
     // The y position is initially less than 0 so that the enemies fall from the top. This data is stored as a property
     // of the instance since it is needed throughout its lifetime. The destroyed property will indicate whether this enemy
     // is still in play. It is set to true whenever the enemy goes past the bottom of the screen.
     // It is used in the Engine to determine whether or not an enemy is in a particular column.
-    this.y = -ENEMY_HEIGHT;
+    this.y = -PLAYER_HEIGHT;
     this.destroyed = false;
 
     // We create a new DOM element. The tag of this DOM element is img. It is the DOM node that will display the enemy image
@@ -36,7 +36,7 @@ class Enemy {
     this.domElement = document.createElement('img');
 
     // We give it a src attribute to specify which image to display.
-    this.domElement.src = './images/enemy.png';
+    this.domElement.src = './images/snowball.png';
     // We modify the CSS style of the DOM node.
     this.domElement.style.position = 'absolute';
     this.domElement.style.left = `${this.x}px`;
@@ -45,7 +45,10 @@ class Enemy {
 
     // Show that the user can actually see the img DOM node, we append it to the root DOM node.
     theRoot.appendChild(this.domElement);
-    this.speed = Math.random() / 2 + 0.25;
+    this.speed = Math.random() / 2 + speedIncrement;//0.25;
+
+    this.collided = false;
+
   }
 
   // We set the speed property of the enemy. This determines how fast it moves down the screen.
@@ -67,5 +70,25 @@ class Enemy {
 
       this.destroyed = true;
     }
-  }
+  };
+
+  updateLeftEnemies(timeDiff) {
+    // We update the y property of the instance in proportion of the amount of time
+    // since the last call to update. We also update the top css property so that the image
+    // is updated on screen
+
+    this.x = this.x + timeDiff * this.speed;
+    this.domElement.style.left = `${this.x}px`;
+
+    
+    if (this.x > (GAME_WIDTH-ENEMY_WIDTH)) {
+      this.root.removeChild(this.domElement);
+
+      this.destroyed = true;
+    }
+  };
+  removeEnemy(){
+    this.root.removeChild(this.domElement);
+    this.destroyed = true;
+  };
 }

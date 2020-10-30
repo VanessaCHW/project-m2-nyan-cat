@@ -2,20 +2,15 @@
 // of the game relating to the interactions between the player and the
 // enemy and also relating to how our enemies are created and evolve over time
 class Engine {
-  // The constructor has one parameter. It will refer to the DOM node that we will be adding everything to.
-  // You need to provide the DOM node when you create an instance of the class
+
   constructor(theRoot) {
-    // We need the DOM element every time we create a new enemy so we
-    // store a reference to it in a property of the instance.
     this.root = theRoot;
-    // We create our hamburger.
-    // Please refer to Player.js for more information about what happens when you create a player
     this.player = new Player(this.root);
-    // Initially, we have no enemies in the game. The enemies property refers to an array
-    // that contains instances of the Enemy class
     this.enemies = [];
-    // We add the background image to the game
-    addBackground(this.root);
+    /* For enemies coming from the left*/
+    this.leftenemies = [];
+    this.items = [];
+    addBackground(this.root);    
   }
 
   // The gameLoop will run every few milliseconds. It does several things
@@ -39,10 +34,16 @@ class Engine {
       enemy.update(timeDiff);
     });
 
+    this.leftenemies.forEach((enemy) => {
+      enemy.updateLeftEnemies(timeDiff);
+    });
+
     // We remove all the destroyed enemies from the array referred to by \`this.enemies\`.
-    // We use filter to accomplish this.
-    // Remember: this.enemies only contains instances of the Enemy class.
     this.enemies = this.enemies.filter((enemy) => {
+      return !enemy.destroyed;
+    });
+
+    this.leftenemies = this.leftenemies.filter((enemy) => {
       return !enemy.destroyed;
     });
 
@@ -54,25 +55,107 @@ class Engine {
       this.enemies.push(new Enemy(this.root, spot));
     }
 
+
+    while(this.leftenemies.length < MAX_LEFT_ENEMIES){
+      const spot = nextLeftEnemySpot(this.leftenemies);
+      let leftEn = new Enemy(this.root, spot);
+      leftEn.x = -PLAYER_HEIGHT;
+      leftEn.y = spot * PLAYER_HEIGHT+15;
+      leftEn.domElement.style.left = `${leftEn.x}px`;
+      leftEn.domElement.style.top = `${leftEn.y}px`;
+      this.leftenemies.push(leftEn);
+    }
+
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
-      let playerLost = new Text(this.root,120,220).update('GAME OVER');
+      stopScoreboard();
+      clearInterval(startLevelCount);
+      document.getElementById('restartPrompt').style.display = 'block';
       return;
     }
 
     // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
     setTimeout(this.gameLoop, 20);
+
+    //************************** */
+    // ITEMS
+    //************************** */
+    timeForItem+=1;
+    if(timeForItem>delayItem){
+      //Destroy previous item
+      if(this.items.length>0){
+        this.items[0].removeItem(this.root);
+        this.items.pop();
+      }
+      timeForItem =0;
+      // Create new item
+      let x = (Math.floor(Math.random()*11))*PLAYER_WIDTH;
+      let y = (Math.floor(Math.random()*8))*PLAYER_HEIGHT;
+      let itemNum = (Math.floor(Math.random()*2)==0)? 'mug':'man';
+      let newItem = new item(gameEngine.root,itemNum,x,y);
+      this.items.push(newItem);
+      //set new random delay
+      delayItem =  Math.floor(Math.random()*200)+155;
+    }
+    if(this.items.length >0){
+      this.items[0].itemSelected();
+    }
+
   };
 
   // This method is not implemented correctly, which is why
   // the burger never dies. In your exercises you will fix this method.
   isPlayerDead = () => {
     let isDead = false;
-
+    let thePlayer = this.player;
     this.enemies.forEach(enemy =>{
-      if(enemy.x === this.player.x && enemy.y >= this.player.y){
-        isDead = true;
+      
+      // if they didn't collide yet 
+      // and are in the same column
+      if(enemy.collided == false && thePlayer.x == enemy.x)
+      {
+        if((enemy.y+ENEMY_HEIGHT) > thePlayer.y 
+        && (enemy.y+ENEMY_HEIGHT)< (thePlayer.y+PLAYER_HEIGHT)
+        || (enemy.y < (thePlayer.y+PLAYER_HEIGHT) 
+          && thePlayer.y<(enemy.y+ENEMY_HEIGHT)))
+        {
+          enemy.collided = true;
+          enemy.domElement.style.display = 'none';
+          isDead = thePlayer.health ==1? true:false;
+          thePlayer.health -=1;
+  
+          //update health
+          document.getElementById('livesRemaining').innerText = `HEALTH: ${thePlayer.health} / ${PLAYER_MAX_HEALTH}`;
+
+          toggleAnimation();
+          collisionSound.play();
+        }
+      }
+    });
+
+    this.leftenemies.forEach(enemy =>{
+      
+      // if they didn't collide yet 
+      // and are in the same column
+      if(enemy.collided == false && thePlayer.y == enemy.y)
+      {
+        if((enemy.x+LEFT_ENEMY_WIDTH) > thePlayer.x 
+        && (enemy.x+LEFT_ENEMY_WIDTH)< (thePlayer.x+PLAYER_WIDTH)
+        || (enemy.x > thePlayer.x 
+          && thePlayer.x+PLAYER_WIDTH>enemy.x))
+        {
+          enemy.collided = true;
+          enemy.domElement.style.display = 'none';
+          isDead = thePlayer.health ==1? true:false;
+          thePlayer.health -=1;
+  
+          //update health
+          document.getElementById('livesRemaining').innerText = `HEALTH: ${thePlayer.health} / ${PLAYER_MAX_HEALTH}`;
+
+          toggleAnimation();
+          collisionSound.play();
+        }
       }
     });
 

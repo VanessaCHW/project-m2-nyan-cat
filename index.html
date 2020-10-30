@@ -1,11 +1,46 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Nyan Kat</title>
+    <title>snowfight!</title>
+    <link rel="shortcut icon" href='.'>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Saira&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div id="startMenu">
+        <p id="gameTitle">snowfight!</p>
+        <ul id="gameIntro">
+          <li>❄ Use ↔↕ arrows to escape your enemy and accumulate points.</li>
+          <li>❄ Points and difficulty level increase every few seconds.</li>
+        </ul>
+        <div class="itemsList">
+          <p><u>Items</u></p>
+        </div>
+        <div class="itemsList">
+          <img src="/images/man.png" class="manImg">
+          <p>Snowmen give you 100 extra points.</p>
+        </div>
+        <div class="itemsList">
+          <img src="/images/mug.png" class="mugImg">
+          <p>Hot chocolate restores +1 health (max 5).</p>
+        </div>
+        <div id="startDiv">
+          <p id="startButton">START GAME</p>
+        </div>
+      </div>
+      <div id="restartPrompt" class="restartPrompt">
+        <p id="youLostMsg">You lost 😢 Please try again! </p>
+        <p id="restartClicked">RESTART</p>
+      </div>
+      <div id="lives">
+        <p id="score">SCORE: 0</p>
+        <p id="level">LEVEL: 1</p>
+        <p id="livesRemaining">HEALTH: 5 / 5</p>
+      </div>
+    </div>
     <script src="js/data.js"></script>
+    <script src="js/items.js"></script>
     <script src="js/Enemy.js"></script>
     <script src="js/engine-utilities.js"></script>
     <script src="js/Engine.js"></script>

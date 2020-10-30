@@ -1,0 +1,180 @@
+#startMenu {
+    position: absolute;
+    top: 0px;
+    color: white;
+    width: 825px;
+    height: 630px;
+    font-family: 'Saira', sans-serif;
+    background: rgba(83, 117, 131, 0.5);
+}
+
+#gameTitle{
+    font-size: 80px;
+    margin-top: 35px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+#gameIntro, .flake{
+    font-size: 20px;
+    text-align: left;
+    margin-top: 30px;
+    padding: 0 80px;
+    box-sizing: content-box;
+    column-count: 2;
+    column-gap: 40px;
+}
+ li{
+     list-style: none;
+ }
+
+#startDiv{
+    display: flex;
+    justify-content: center;
+    width: 825px;
+}
+#startButton{
+    text-align: center;
+    color: black;
+    background-color: white;
+    border-radius: 4px;
+    width: 300px;
+    margin-top: 50px;
+    padding: 20px 0px;
+    font-size: 40px;
+    border: 0.5px solid white;
+}
+
+#startButton:hover,#restartClicked:hover{
+    cursor: pointer;
+    background-color: transparent;
+    color: white;
+}
+
+
+.restartPrompt{
+    position: absolute;
+    width: 825px;
+    height: 670px;
+    text-align: center;
+    display: none;
+    font-family: 'Saira', sans-serif;
+    z-index: 20;
+    color: black;
+    background: rgba(118, 234, 255, 0.3);
+}
+
+#restartClicked{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    color: black;
+    background-color: white;
+    border-radius: 4px;
+    width: 200px;
+    padding: 20px 0px;
+    font-size: 40px;
+    outline: none;
+    border: 0.5px solid white;
+
+}
+
+#restartClicked:hover{
+    cursor: pointer;
+}
+
+#youLostMsg{
+    color: black;
+    margin-top: 240px;
+    margin-bottom: 0;
+    font-size: 30px;
+}
+
+#lives{
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 10px;
+    width: 825px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Saira', sans-serif;
+    line-height: 24px;
+    font-size: 24px;
+    color: rgb(83, 117, 131);
+}
+
+ #livesRemaining{
+    margin: 0;
+    display: inline;
+    z-index: 20;
+    padding: 0 10px;
+}
+
+#score{
+    margin: 0;
+    display: inline;
+    z-index: 20;
+    padding: 0 10px;
+    width: 140px;
+}
+
+#level{
+    margin: 0;
+    display: inline;
+    border: rgb(83, 117, 131) 1px solid;
+    padding: 5px 10px;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 20px;
+
+}
+
+.activatePlayerAnim
+{
+    animation: shakePlayer 0.4s;
+    animation-iteration-count: 2;
+}
+
+@keyframes shakePlayer{
+    0% {transform: translate(2px,1px) rotate(0deg);}
+    10% {transform: translate(-4px,-2px) rotate(-10deg);}
+    20% {transform: translate(2px,1px) rotate(10deg);}
+    40% {transform: translate(-4px,-2px) rotate(-10deg);}
+    50% {transform: translate(2px,1px) rotate(0deg);}
+    60% {transform: translate(-4px,-2px) rotate(20deg);}
+    70% {transform: translate(2px,1px) rotate(0deg);}
+    80% {transform: translate(-4px,-2px) rotate(-20deg);}
+    90% {transform: translate(2px,1px) rotate(10deg);}
+    100% {transform: translate(0,0) rotate(0deg);}
+}
+
+#app{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100vw;
+}
+
+.itemsList{
+    width: 825px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 100px;
+}
+
+.mugImg{
+    width: 34px;
+    height: 32px;
+}
+.manImg{
+    width: 33px;
+    height: 35px;
+}
+.itemsList>p{
+    margin: 0;
+    padding: 5px 10px;
+    font-size: 20px;
+}
